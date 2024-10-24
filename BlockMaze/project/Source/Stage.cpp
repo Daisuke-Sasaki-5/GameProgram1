@@ -1,5 +1,6 @@
 #include "Stage.h"
 #include "Player.h"
+#include "Coin.h"
 
 
 // 1 = レンガ　2 = コイン　9 = プレイヤー
@@ -11,8 +12,8 @@ int map[HEIGHT][WIDTH] = {
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	{1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-	{1, 0, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1},
-	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	{1, 0, 1, 1, 1, 2, 0, 0, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1},
 	{1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1},
 	{1, 1, 1, 1, 1, 9, 0, 0, 1, 1, 1, 1},
 	{1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -28,6 +29,12 @@ Stage::Stage()
 				p->position.x = 100 + i * 40;
 				p->position.y = 100 + j * 40;
 			}
+			if (map[j][i] == 2) {
+				Coin* c = Instantiate<Coin>();
+				c->position.x = 100 + i * 40;
+				c->position.y = 100 + j * 40;
+			}
+
 		}
 	}
 }
@@ -45,9 +52,9 @@ void Stage::Draw()
 			if (map[j][i] == 1) {
 				DrawRectGraph(x, y, 0, 40, CHIP_SIZE, CHIP_SIZE, hImage, TRUE);
 			}
-			if (map[j][i] == 2) {
-				DrawRectGraph(x, y, 120, 0, CHIP_SIZE, CHIP_SIZE, hImage, TRUE);
-			}
+			//if (map[j][i] == 2) {
+			//	DrawRectGraph(x, y, 120, 0, CHIP_SIZE, CHIP_SIZE, hImage, TRUE);
+			//}
 		}
 	}
 }
