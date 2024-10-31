@@ -15,4 +15,5 @@ public:
 
 	bool got; //  æ‚ç‚ê‚½
 	int counter; // Á‚·‚Ü‚Å‚ÌŠÔ
+	float v; // ’µ‚Ë‚é“®‚«‚Ì‘¬“x
 };

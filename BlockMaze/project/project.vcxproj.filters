@@ -102,6 +102,9 @@
     <ClInclude Include="Source\Coin.h">
       <Filter>PlayScene</Filter>
     </ClInclude>
+    <ClInclude Include="Source\stage1.h">
+      <Filter>PlayScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Library">

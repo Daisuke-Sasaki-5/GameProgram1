@@ -12,4 +12,10 @@ public:
 	int speed = 2; // プレイヤーの速さ
 	int hImage;
 	VECTOR2 position;
+	float velocity;
+	bool prevJumpKey; // 前のジャンプキー
+	bool onGround; // 地面にいる
 };
+
+// インスタンスはメンバー変数と関数を持っているものの実体
+// 変数は値を保持するもの
