@@ -1,6 +1,7 @@
 #include "Coin.h"
 #include "Player.h"
 #include "config.h"
+#include "Stage.h"
 
 const int CHIP_SIZE = 40;
 
@@ -39,5 +40,6 @@ void Coin::Update()
 
 void Coin::Draw()
 {
-	DrawRectGraph(position.x, position.y, 120, 0, CHIP_SIZE, CHIP_SIZE, hImage, TRUE);
+	Stage* s = FindGameObject<Stage>();
+	DrawRectGraph(position.x - s->scroll, position.y, 120, 0, CHIP_SIZE, CHIP_SIZE, hImage, TRUE);
 }

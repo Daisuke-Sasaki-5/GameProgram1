@@ -15,6 +15,8 @@ public:
 	float velocity;
 	bool prevJumpKey; // 前のジャンプキー
 	bool onGround; // 地面にいる
+
+	bool goaled; // ゴール
 };
 
 // インスタンスはメンバー変数と関数を持っているものの実体
