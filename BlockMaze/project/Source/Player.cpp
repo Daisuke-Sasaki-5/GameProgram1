@@ -108,7 +108,7 @@ void Player::Update()
 	if (position.x - s->scroll < 0) {
 		s->scroll = position.x;
 	}
-	if (s->IsGoal(position + VECTOR2(20, 20))) {
+	if (goaled == false && s->IsGoal(position + VECTOR2(20, 20))) {
 		goaled = true;
 		Instantiate<GoalText>();
 	}

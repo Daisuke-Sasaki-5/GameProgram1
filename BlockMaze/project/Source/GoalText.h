@@ -9,4 +9,5 @@ public:
 	void Draw()override;
 
 	float timer;
+	bool fadeStarted;
 };

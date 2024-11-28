@@ -1,9 +1,11 @@
 #include "GoalText.h"
 #include "..//Library/time.h"
+#include "Fader.h"
 
 GoalText::GoalText()
 {
 	timer = 0.0f;
+	fadeStarted = false;
 }
 
 GoalText::~GoalText()
@@ -14,10 +16,20 @@ int score = 1000;
 
 void GoalText::Update()
 {
+	if (fadeStarted) {
+		Fader* f = FindGameObject<Fader>();
+		if (f->IsFinish()) {
+			SceneManager::ChangeScene("TitleScene");
+		}
+		return; //FadeOut‚ªŽn‚Ü‚Á‚Ä‚¢‚é‚Ì‚ÅA‚±‚±‚æ‚è‰º‚Í‚â‚ç‚È‚¢
+	}
 	timer += Time::DeltaTime();
 	if (timer >= 2.5f) {
 		if (CheckHitKey(KEY_INPUT_SPACE)) {
-			SceneManager::ChangeScene("TitleScene");
+			Fader* f = FindGameObject<Fader>();
+			f->Fadeout(GetColor(100, 100, 100), 1.0f);
+			fadeStarted = true;
+		//	SceneManager::ChangeScene("TitleScene");
 		}
 	}
 }
