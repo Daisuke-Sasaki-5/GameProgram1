@@ -46,8 +46,21 @@ void Stage::Draw()
 			//if (map[j][i] == 2) {
 			//	DrawRectGraph(x, y, 120, 0, CHIP_SIZE, CHIP_SIZE, hImage, TRUE);
 			//}
+			if (map[j][i] == 4) {
+				DrawRectGraph(x - scroll, y, 200, 0, 40, 40, hImage, TRUE);
+			}
 		}
 	}
+
+	Player* pl = FindGameObject<Player>();
+
+	int size = GetFontSize();
+
+	SetFontSize(45);
+	int score = (pl->position.x - pl->startposition.x) / 40;
+	DrawFormatString(900, 10, GetColor(15, 15, 255), "SCORE:%6d", score);
+
+	SetFontSize(size);
 }
 
 int Stage::IsWallRight(VECTOR2 pos)

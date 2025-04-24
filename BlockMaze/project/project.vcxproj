@@ -151,6 +151,7 @@
     <ClInclude Include="Source\GoalText.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\playScene.h" />
+    <ClInclude Include="Source\RESULTScene.h" />
     <ClInclude Include="Source\sceneFactory.h" />
     <ClInclude Include="Source\Stage.h" />
     <ClInclude Include="Source\stage1.h" />

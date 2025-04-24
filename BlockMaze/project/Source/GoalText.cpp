@@ -1,11 +1,14 @@
 #include "GoalText.h"
 #include "..//Library/time.h"
 #include "Fader.h"
+#include "Player.h"
+#include <math.h>
 
 GoalText::GoalText()
 {
 	timer = 0.0f;
 	fadeStarted = false;
+	
 }
 
 GoalText::~GoalText()
@@ -32,16 +35,20 @@ void GoalText::Update()
 		//	SceneManager::ChangeScene("TitleScene");
 		}
 	}
+
 }
 
 void GoalText::Draw()
 {
+	Player* pl = FindGameObject<Player>();
+
 	int size = GetFontSize();
 	SetFontSize(50);
-	DrawString(200, 200, "GOAL", GetColor(25, 155, 0));
+	DrawString(200, 200, "GAMEOVER", GetColor(25, 155, 0));
 	if (timer >= 1.0f) {
 		SetFontSize(25);
-		DrawFormatString(200, 300, GetColor(255, 255, 255), "SCORE %06d", score);
+		int score = (pl->position.x - pl->startposition.x) / 40;
+		DrawFormatString(200, 300, GetColor(255, 255, 255), "SCORE:%6d", score);
 	}
 	if (timer >= 2.0f) {
 		DrawString(200, 500, "PUSU SPACE KEY", GetColor(255, 255, 255));
