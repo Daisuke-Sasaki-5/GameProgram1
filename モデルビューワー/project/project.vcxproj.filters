@@ -56,6 +56,12 @@
     <ClCompile Include="Source\Axis.cpp">
       <Filter>TitleScene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object3D.cpp">
+      <Filter>TitleScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -124,6 +130,12 @@
       <Filter>TitleScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Model.h">
+      <Filter>TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera.h">
+      <Filter>TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Object3D.h">
       <Filter>TitleScene</Filter>
     </ClInclude>
   </ItemGroup>

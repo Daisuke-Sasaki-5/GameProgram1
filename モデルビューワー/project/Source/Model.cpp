@@ -4,6 +4,7 @@ Model::Model()
 {
 	hModel = MV1LoadModel("data/Fighter.mv1");
 	rotation = VGet(0, 0, 0);
+	position = VGet(0, 0, 0);
 }
 
 Model::~Model()
@@ -12,12 +13,18 @@ Model::~Model()
 
 void Model::Update()
 {
-	rotation.z += 180.0f * Time::DeltaTime()  * DegToRad; 
-}
-
-void Model::Draw()
-{
-	MV1SetRotationXYZ(hModel, rotation);
-	MV1SetPosition(hModel, VGet(0, 0, 0));
-	MV1DrawModel(hModel);
+	if (CheckHitKey(KEY_INPUT_D))
+	{
+		rotation.y += 3.0f * DegToRad;
+	}
+	if (CheckHitKey(KEY_INPUT_A))
+	{
+		rotation.y -= 3.0f * DegToRad;
+	}
+	if (CheckHitKey(KEY_INPUT_W))
+	{
+		// ëOÇ…êiÇﬁ
+		VECTOR velosity = VGet(0, 0, 1) * MGetRotY(rotation.y);
+		position += velosity;
+	}
 }

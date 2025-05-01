@@ -14,8 +14,8 @@ void Axis::Update()
 
 void Axis::Draw()
 {
-//  SetCameraPositionAndTarget_UpVecY(VGet(100, 200, -300), VGet(0, 0, 0));
-	SetCameraPositionAndTarget_UpVecY(VGet(0, 300, -10), VGet(0, 0, 0)); // カメラ真上
+//	SetCameraPositionAndTarget_UpVecY(VGet(100, 200, -300), VGet(0, 0, 0));
+//	SetCameraPositionAndTarget_UpVecY(VGet(0, 300, -10), VGet(0, 0, 0)); // カメラ真上
 
 	DrawLine3D(VGet(-100, 0, 0), VGet(100, 0, 0), GetColor(255, 0, 0));
 	DrawCone3D(VGet(100, 0, 0), VGet(80, 0, 0), 7, 20, GetColor(255, 0, 0), GetColor(255, 0, 0), 1);
