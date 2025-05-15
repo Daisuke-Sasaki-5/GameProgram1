@@ -30,8 +30,18 @@ Player::~Player()
 void Player::Update()
 {
 	anim->Update();
+	if (CheckHitKey(KEY_INPUT_D))
+	{
+		rotation.y += 3.0f * DegToRad;
+	}
+	if (CheckHitKey(KEY_INPUT_A))
+	{
+		rotation.y -= 3.0f * DegToRad;
+	}
 	if (CheckHitKey(KEY_INPUT_W))
 	{
+		VECTOR velosity = VGet(0, 0, 1) * 3.0f * MGetRotY(rotation.y);
+		position += velosity;
 		anim->Play(1);
 	}
 	else

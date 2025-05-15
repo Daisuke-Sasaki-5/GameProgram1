@@ -1,12 +1,13 @@
 #include "Camera.h"
 #include "../ImGui/imgui.h"
+#include "Player.h"
 
 Camera::Camera()
 {
 //	rotation = VGet(80*DegToRad,0,0);
 //	distance = 500.0f;
 	rotation = VGet(30 * DegToRad, 0, 0);
-	distance = 300.0f;
+	distance = 400.0f;
 }
 
 Camera::~Camera()
@@ -19,6 +20,10 @@ void Camera::Update()
 
 void Camera::Draw()
 {
-	VECTOR pos = VGet(0,0,-distance) * MGetRotX(rotation.x) * MGetRotY(rotation.y);
-	SetCameraPositionAndTarget_UpVecY(pos, VGet(0, 0, 0));
+	Player* p = FindGameObject<Player>();
+	VECTOR pRot = p->GetRotation();
+	VECTOR pPos = p->GetPositin();
+	VECTOR camPos = VGet(0, 200, -400) * MGetRotY(pRot.y) + pPos;
+	VECTOR camLook = pPos + VGet(0, 100, 0);
+	SetCameraPositionAndTarget_UpVecY(camPos, camLook);
 }
