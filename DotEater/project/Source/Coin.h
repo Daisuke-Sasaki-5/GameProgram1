@@ -10,4 +10,7 @@ public:
 
 private:
 	bool gotten; // Žæ‚ç‚ê‚½‚æ
+	void homingStart();
+	void homingUpdate();
+	VECTOR3 velocity; // ˆÚ“®ƒxƒNƒgƒ‹
 };
