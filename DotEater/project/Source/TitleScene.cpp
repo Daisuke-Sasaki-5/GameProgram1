@@ -1,18 +1,60 @@
 #include "TitleScene.h"
-#include <fstream>
+#include "Record.h"
+
+Record* rp;
+
+class Base
+{ // 基底クラス
+public:
+	Base() { OutputDebugString("BASE\n"); }
+	virtual ~Base() { OutputDebugString("~BASE\n");  }
+	virtual void F1(){ OutputDebugString("BASE::F1\n"); }
+	virtual void F2(){ OutputDebugString("BASE::F2\n"); }
+//protected…派生クラスからは使えるけど、他のクラスからはprivate
+	void F3(){ OutputDebugString("BASE::F3\n"); }
+	int* x;
+private:
+};
+
+class Sub : public Base
+{ // 派生クラス
+public:
+	Sub() { OutputDebugString("SUB\n");  }
+	~Sub() /*overrideは書かない*/ { OutputDebugString("~SUB\n"); }
+	void F1() override { OutputDebugString("SUB::F1\n"); }
+	void F3() { OutputDebugString("SUB::F3\n"); }
+	void Update() { F1(); F3(); }
+};
+
+Sub* sub;
+Base* base;
 
 TitleScene::TitleScene()
 {
-	std::ifstream ifs("data/stage00.csv"); // ファイルを開く
-	std::string str; // 文字列を用意
-	getline(ifs, str); // ファイルから1行読む
-	int n = str.find(','); // ,の文字の位置を探す
-	std::string s1 = str.substr(0, n); // 文字列を切り取る(0文字目からn文字)
-	int d = stoi(s1); // 文字列をintに変える
+	sub = new Sub();
+	sub->F1();
+	sub->F2();
+	sub->F3();
+
+	base = new Sub();
+	base->F1();
+	base->F2();
+	base->F3();
+	// インスタンスはクラスの実体(クラスは設計図)
+	// 実体を複数作ることもできる
+	// ヒープメモリーは事故が起こりやすい
+	Record r;
+	Record r2; // 不要になったら、自動で消えるインスタンス 
+
+	rp = new Record(); // ヒープに作られるインスタンス
 }
 
 TitleScene::~TitleScene()
 {
+	delete rp; // ヒープメモリーを開放する
+
+	delete sub;
+	delete base;
 }
 
 void TitleScene::Update()

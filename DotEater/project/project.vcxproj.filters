@@ -78,6 +78,7 @@
     <ClCompile Include="Source\PlayTime.cpp">
       <Filter>PlayScene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Record.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -171,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="Source\PlayTime.h">
       <Filter>PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Record.h">
+      <Filter>TitleScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
