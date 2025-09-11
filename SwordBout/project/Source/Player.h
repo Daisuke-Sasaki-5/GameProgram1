@@ -34,4 +34,19 @@ private:
 	};
 	Animator* animator;
 	Camera* camera;
+
+	int hSabel;
+
+	// ó‘Ô‘JˆÚ
+	enum State
+	{
+		ST_NORMAL = 0,
+		ST_ATTACK1,
+		ST_ATTACK2,
+		ST_ATTACK3,
+	};
+	State state; // ó‘Ô‚ğ‚Â•Ï”
+
+	void UpdateNormal();
+	void UpdateAttack1();
 };

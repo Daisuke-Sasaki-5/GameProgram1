@@ -39,6 +39,11 @@ Player::Player(const VECTOR3& pos, float rot)
 	transform.rotation.y = rot;
 
 	camera = FindGameObject<Camera>();
+
+	hSabel = MV1LoadModel("data/model/Character/Weapon/Sabel/Sabel.mv1");
+	assert(hSabel > 0);
+
+	state = ST_NORMAL;
 }
 
 Player::~Player()
@@ -59,7 +64,44 @@ VECTOR3 moveVec;
 void Player::Update()
 {
 	animator->Update();
+	switch (state)
+	{
+	case Player::ST_NORMAL:
+		UpdateNormal();
+		break;
+	case Player::ST_ATTACK1:
+		UpdateAttack1();
+		break;
+	}
 
+	Stage* stage = FindGameObject<Stage>();
+	VECTOR hit; // 地面の座標が入る関数
+	VECTOR pos1 = transform.position + VGet(0, 100, 0);
+	VECTOR pos2 = transform.position + VGet(0, -100, 0);
+	if (stage->CollideLine(pos1, pos2, &hit))
+	{
+		transform.position = hit;
+	}
+
+	camera->SetPlayerPosition(transform.position);
+}
+
+void Player::Draw()
+{
+	Object3D::Draw(); // キャラの表示
+	DrawLine3D(transform.position + moveVec * 100, transform.position, GetColor(255, 0, 0));
+
+	MATRIX m =  MV1GetFrameLocalWorldMatrix(hModel, 29);
+	MV1SetMatrix(hSabel, m);
+	MV1DrawModel(hSabel);
+
+	VECTOR s1 = VGet(0, 0, 0) * m;
+	VECTOR s2 = VGet(0, -100, 0) * m;
+	DrawLine3D(s1, s2, GetColor(255, 0, 0));
+}
+
+void Player::UpdateNormal()
+{
 	// 入力をベクトルに直す
 	VECTOR3 intputVec = VECTOR3(0, 0, 0);
 	if (CheckHitKey(KEY_INPUT_W))
@@ -83,6 +125,7 @@ void Player::Update()
 	// 進みたいベクトルを求める(実際に進むベクトル)
 	// カメラの回転は、camera->GetTransform().rotationで手に入る
 	if (intputVec.Size() > 0) {
+		animator->Play(A_RUN);
 		moveVec = intputVec * MGetRotY(camera->GetTransform().rotation.y);
 		VECTOR3 front = VECTOR3(0, 0, 1) * MGetRotY(transform.rotation.y); // 前ベクトル
 		VECTOR3 right = VECTOR3(1, 0, 0) * MGetRotY(transform.rotation.y); // 右ベクトル
@@ -92,7 +135,7 @@ void Player::Update()
 			transform.position += moveVec * 5.0f;
 			transform.rotation.y = atan2f(moveVec.x, moveVec.z);
 		}
-		else if(VDot(moveVec,right) >= 0)
+		else if (VDot(moveVec, right) >= 0)
 		{
 			transform.rotation.y += 30.0f * DegToRad;
 		}
@@ -101,16 +144,23 @@ void Player::Update()
 			transform.rotation.y -= 30.0f * DegToRad;
 		}
 	}
+	else
+	{
+		animator->Play(A_NEUTRAL);
+	}
 
-	// 回転を合わせる(1フレームで60度回る) : 角度が合わなければ進まない
-
-	// 角度があっていれば、その向きに進む
-
-	camera->SetPlayerPosition(transform.position);
+	if (CheckHitKey(KEY_INPUT_M)) // 攻撃
+	{
+		animator->Play(A_ATTACK1);
+		state = ST_ATTACK1;
+	}
 }
 
-void Player::Draw()
+void Player::UpdateAttack1()
 {
-	Object3D::Draw(); // キャラの表示
-	DrawLine3D(transform.position + moveVec * 100, transform.position, GetColor(255, 0, 0));
+	// 攻撃中
+	if (animator->IsFinish())
+	{
+		state = ST_NORMAL;
+	}
 }
