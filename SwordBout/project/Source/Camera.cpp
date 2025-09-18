@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "PadInput.h"
 
 namespace {
 	static float distance = 500.0f; // ƒLƒƒƒ‰‚©‚ç‚Ì‹——£
@@ -16,6 +17,12 @@ Camera::~Camera()
 
 void Camera::Update()
 {
+	PadInput* pad = FindGameObject<PadInput>();
+	float padX = pad->RStickX();
+	transform.rotation.y += padX * 3.0f * DegToRad;
+	float padY = pad->RStickY();
+	transform.rotation.x += padY * 2.0f * DegToRad;
+
 	if (CheckHitKey(KEY_INPUT_RIGHT))
 	{
 		transform.rotation.y += 3.0f * DegToRad;

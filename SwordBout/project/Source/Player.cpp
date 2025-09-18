@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "Stage.h"
 #include "Camera.h"
+#include "PadInput.h"
 
 Player::Player() : Player(VGet(0,0,0), 0.0f){}
 
@@ -104,23 +105,10 @@ void Player::UpdateNormal()
 {
 	// 入力をベクトルに直す
 	VECTOR3 intputVec = VECTOR3(0, 0, 0);
-	if (CheckHitKey(KEY_INPUT_W))
-	{
-		intputVec += VECTOR3(0, 0, 1);
-	}
-	if (CheckHitKey(KEY_INPUT_S))
-	{
-		intputVec += VECTOR3(0, 0, -1);
-	}
-	if (CheckHitKey(KEY_INPUT_D))
-	{
-		intputVec += VECTOR3(1, 0, 0);
-	}
-	if (CheckHitKey(KEY_INPUT_A))
-	{
-		intputVec += VECTOR3(-1, 0, 0);
-	}
-	intputVec = intputVec.Normalize();
+	PadInput* pad = FindGameObject<PadInput>();
+	VECTOR2 inp = pad->LStickVec();
+	intputVec.x = inp.x;
+	intputVec.z = inp.y;
 
 	// 進みたいベクトルを求める(実際に進むベクトル)
 	// カメラの回転は、camera->GetTransform().rotationで手に入る
@@ -149,7 +137,7 @@ void Player::UpdateNormal()
 		animator->Play(A_NEUTRAL);
 	}
 
-	if (CheckHitKey(KEY_INPUT_M)) // 攻撃
+	if (pad->OnPush(XINPUT_BUTTON_B)) // 攻撃
 	{
 		animator->Play(A_ATTACK1);
 		state = ST_ATTACK1;
