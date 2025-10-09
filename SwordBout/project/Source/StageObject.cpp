@@ -54,7 +54,7 @@ void StageObject::PostDraw()
 	}
 }
 
-bool StageObject::CollideLine1(const VECTOR& pos1, const VECTOR& pos2, VECTOR* hit) const
+bool StageObject::CollideLine(const VECTOR& pos1, const VECTOR& pos2, VECTOR* hit) const
 {
 	MV1_COLL_RESULT_POLY ret = MV1CollCheck_Line(hModel, -1, pos1, pos2);
 	if (ret.HitFlag > 0)

@@ -46,7 +46,13 @@ private:
 		ST_ATTACK3,
 	};
 	State state; // ó‘Ô‚ğ‚Â•Ï”
+	bool PushButton; // ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚©
 
 	void UpdateNormal();
 	void UpdateAttack1();
+	void UpdateAttack2();
+	void UpdateAttack3();
+
+	VECTOR sabelBtm;
+	VECTOR sabelTop;
 };

@@ -18,6 +18,10 @@ void PadInput::Update()
 		prevButtons[i] = input.Buttons[i];
 	}
 	GetJoypadXInputState(padId, &input);
+	if (CheckHitKey(KEY_INPUT_M))
+	{
+		input.Buttons[XINPUT_BUTTON_A] = 1;
+	}
 }
 
 void PadInput::Draw()

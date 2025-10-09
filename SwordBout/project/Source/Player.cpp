@@ -3,6 +3,7 @@
 #include "Stage.h"
 #include "Camera.h"
 #include "PadInput.h"
+#include "Goblin.h"
 
 Player::Player() : Player(VGet(0,0,0), 0.0f){}
 
@@ -73,6 +74,12 @@ void Player::Update()
 	case Player::ST_ATTACK1:
 		UpdateAttack1();
 		break;
+	case Player::ST_ATTACK2:
+		UpdateAttack2();
+		break;
+	case Player::ST_ATTACK3:
+		UpdateAttack3();
+		break;
 	}
 
 	Stage* stage = FindGameObject<Stage>();
@@ -96,9 +103,9 @@ void Player::Draw()
 	MV1SetMatrix(hSabel, m);
 	MV1DrawModel(hSabel);
 
-	VECTOR s1 = VGet(0, 0, 0) * m;
-	VECTOR s2 = VGet(0, -100, 0) * m;
-	DrawLine3D(s1, s2, GetColor(255, 0, 0));
+	sabelBtm = VGet(0, 0, 0) * m;
+	sabelTop = VGet(0, -100, 0) * m;
+	DrawLine3D(sabelBtm, sabelTop, GetColor(255, 0, 0));
 }
 
 void Player::UpdateNormal()
@@ -137,16 +144,65 @@ void Player::UpdateNormal()
 		animator->Play(A_NEUTRAL);
 	}
 
-	if (pad->OnPush(XINPUT_BUTTON_B)) // UŒ‚
+	if (pad->OnPush(XINPUT_BUTTON_A)) // UŒ‚
 	{
 		animator->Play(A_ATTACK1);
-		state = ST_ATTACK1;
+		PushButton = false;
+		state = ST_ATTACK1; // ó‘Ô‚ð•Ï‚¦‚é
 	}
 }
 
 void Player::UpdateAttack1()
 {
+	if (animator->GetCurrentFrame() >= 8.5 && PushButton)
+	{
+		animator->Play(A_ATTACK2);
+		state = ST_ATTACK2;
+		PushButton = false;
+	}
+	else
+	{
+		Goblin* gob = FindGameObject<Goblin>();
+		gob->CheckAttack(sabelBtm, sabelTop);
+		PadInput* pad = FindGameObject<PadInput>();
+		if (pad->OnPush(XINPUT_BUTTON_A))
+		{
+			PushButton = true;
+		}
+	}
+
 	// UŒ‚’†
+	if (animator->IsFinish())
+	{
+		state = ST_NORMAL;
+	}
+}
+
+void Player::UpdateAttack2()
+{
+	if (animator->GetCurrentFrame() >= 9.5 && PushButton)
+	{
+		animator->Play(A_ATTACK3);
+		state = ST_ATTACK3;
+		PushButton = false;
+	}
+	else
+	{
+		PadInput* pad = FindGameObject<PadInput>();
+		if (pad->OnPush(XINPUT_BUTTON_A))
+		{
+			PushButton = true;
+		}
+	}
+
+	if (animator->IsFinish())
+	{
+		state = ST_NORMAL;
+	}
+}
+
+void Player::UpdateAttack3()
+{
 	if (animator->IsFinish())
 	{
 		state = ST_NORMAL;

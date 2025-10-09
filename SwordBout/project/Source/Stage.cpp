@@ -34,7 +34,7 @@ bool Stage::CollideLine(const VECTOR& pos1, const VECTOR& pos2, VECTOR* hit) con
 {
 	VECTOR pos;
 	StageObject* obj = FindGameObject<StageObject>();
-	return obj->CollideLine1(pos1, pos2, hit);
+	return obj->CollideLine(pos1, pos2, hit);
 }
 
 void Stage::ReadMappingData(std::string filename)
@@ -75,4 +75,6 @@ void Stage::ReadMappingData(std::string filename)
 		int object[8];
 	};
 	ifs.close();
+	new Goblin(VECTOR3(1200, 150, 500), DX_PI);
+	new RedGoblin(VECTOR3(300, 150, 500), 0);
 }
