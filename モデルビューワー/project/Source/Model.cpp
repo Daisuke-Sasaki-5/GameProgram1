@@ -3,6 +3,7 @@
 Model::Model()
 {
 	hModel = MV1LoadModel("data/Fighter.mv1");
+	/*hModel = MV1LoadModel("data/HumanMale_Character.fbx");*/
 	rotation = VGet(0, 0, 0);
 	position = VGet(0, 0, 0);
 }

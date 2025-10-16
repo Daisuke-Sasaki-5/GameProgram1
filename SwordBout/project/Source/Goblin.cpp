@@ -31,6 +31,8 @@ Goblin::Goblin(const VECTOR& pos, float rot)
 
 	transform.position = pos;
 	transform.rotation.y = rot;
+	territory.center = pos;
+	territory.range = 2000.0f;
 
 	state = ST_WAIT;
 }
@@ -66,6 +68,9 @@ void Goblin::Update()
 	case Goblin::ST_ATTACK:
 		UpdateAttack();
 		break;
+	case Goblin::ST_BACK:
+		UpdateBack();
+		break;
 	}
 	Stage* stage = FindGameObject<Stage>();
 	VECTOR hit; // 地面の座標が入る関数
@@ -95,6 +100,7 @@ void Goblin::UpdateWait()
 	VECTOR3 toPlayer = pl->GetTransform().position - transform.position;
 	float cosT = VDot(toPlayer.Normalize(),flont);
 
+	// toPlayerの長さが1000以下
 	if (toPlayer.Size() > 1000) return;
 
 	if (cosT >= cos(60 * DegToRad))
@@ -134,10 +140,72 @@ void Goblin::UpdateChase()
 	{
 		transform.rotation.y -= DegToRad;
 	}
+
 	// 近づいたらATTACKへ
+	if (toPlayer.Size() < 100.0f)
+	{
+		animator->Play(A_ATTACK1);
+		state = ST_ATTACK;
+	}
+
+	// テリトリーを出たらWAIT
+	VECTOR3 v = transform.position - territory.center;
+	if (v.Size() >= territory.range)
+	{
+		animator->Play(A_WALK);
+		state = ST_BACK;
+	}
 }
 
 void Goblin::UpdateAttack()
 {
 	// 攻撃アニメーションが終わったらWAITへ
+	if (animator->IsFinish())
+	{
+		animator->Play(A_NEUTRAL);
+		state = ST_WAIT;
+	}
+}
+
+void Goblin::UpdateBack()
+{
+	VECTOR3 velocity = VECTOR3(0, 0, 2) * MGetRotY(transform.rotation.y);
+	transform.position += velocity;
+	VECTOR3 right = VECTOR3(1, 0, 0) * MGetRotY(transform.rotation.y); // 右ベクトル
+	VECTOR3 toBack = territory.center - transform.position;
+	float ip = VDot(right, toBack);
+
+	if (ip >= 0)
+	{
+		transform.rotation.y += DegToRad;
+	}
+	else
+	{
+		transform.rotation.y -= DegToRad;
+	}
+
+	if (toBack.Size() <= 150)
+	{
+		animator->Play(A_NEUTRAL);
+		state = ST_WAIT;
+	}
+}
+
+float Goblin::MoveTo(VECTOR3 target, float speed)
+{
+	VECTOR3 velocity = VECTOR3(0, 0, speed) * MGetRotY(transform.rotation.y);
+	VECTOR3 right = VECTOR3(1, 0, 0) * MGetRotY(transform.rotation.y); // 右ベクトル
+	VECTOR3 toTagert = target - transform.position;
+	float ip = VDot(right, toTagert);
+
+	if (ip >= 0)
+	{
+		transform.rotation.y += DegToRad;
+	}
+	else
+	{
+		transform.rotation.y -= DegToRad;
+	}
+
+	return toTagert.Size();
 }

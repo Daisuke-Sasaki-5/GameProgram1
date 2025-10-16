@@ -29,10 +29,19 @@ private:
 		ST_DAMAGE,
 		ST_CHASEA,
 		ST_ATTACK,
+		ST_BACK,
 	};
 	State state;
 	void UpdateWait();
 	void UpdateDamage();
 	void UpdateChase();
 	void UpdateAttack();
+	void UpdateBack();
+
+	struct CircleRange {
+		VECTOR center;
+		float range;
+	};
+	CircleRange territory;
+	float MoveTo(VECTOR3 target, float speed);
 };
