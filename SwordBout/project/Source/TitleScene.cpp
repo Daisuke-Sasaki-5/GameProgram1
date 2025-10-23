@@ -1,7 +1,21 @@
 #include "TitleScene.h"
+#include <fstream>
 
 TitleScene::TitleScene()
 {
+	// ==== セーブデータを保存 ====
+	int a = 2000;
+	//                  ↓保存するファイル名   ↓バイナリモード
+	std::ofstream ofs("save.dat", std::ios::binary);
+	ofs.write((char*)&a, sizeof(a));
+					//↑ 変数を保存
+	ofs.close(); // ファイルを閉じる
+
+	// ==== セーブデータを読む ====
+	int b = 0;
+	std::ifstream ifs("save.dat", std::ios::binary);
+	ifs.read((char*)&b, sizeof(b));
+	ifs.close(); 
 }
 
 TitleScene::~TitleScene()

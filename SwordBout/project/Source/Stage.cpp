@@ -55,18 +55,54 @@ void Stage::ReadMappingData(std::string filename)
 		int killCharaNum;
 		int killTargetChara;
 	};
-	struct CharaInfo {
-		int id;
-		VECTOR position;
-		float angle;
-	};
-	struct ObjectInfo {
-		int id;
-		VECTOR position;
-		VECTOR rotation;
-		VECTOR scale;
-	};
-	struct EventInfo {
+	Header header;
+	ifs.read((char*)&header, sizeof(header));
+	new Player(header.PlayerPosition, header.PlayerAngle);
+
+	// 8‘Ì(header.charaInfoNum)‚Ì“GƒLƒƒƒ‰‚ð“Ç‚Þ
+	for (int i = 0; i < header.CharaInfoNum; i++)
+	{
+		struct CharaInfo {
+			int id;
+			VECTOR position;
+			float angle;
+		};
+		CharaInfo chara;
+		ifs.read((char*)&chara, sizeof(chara));
+
+		switch (chara.id)
+		{
+		case 1:
+			new Goblin(chara.position, chara.angle);
+			break;
+		case 2:
+			new Bee(chara.position, chara.angle);
+			break;
+		case 3:
+			new Golem(chara.position, chara.angle);
+			break;
+		case 4:
+			new RedGoblin(chara.position, chara.angle);
+			break;
+		}
+		
+	}
+
+	for (int i = 0; i < header.ObjectInfoNum; i++)
+	{
+		struct ObjectInfo {
+			int id;
+			VECTOR position;
+			VECTOR rotation;
+			VECTOR scale;
+		};
+		ObjectInfo obj;
+		ifs.read((char*)&obj, sizeof(obj));
+		char s[256];
+		sprintf_s<256>(s, "Stage_Obj%03d", obj.id);
+		new StageObject(s, obj.position, obj.rotation, obj.scale);
+	}
+		struct EventInfo {
 		int type;
 		VECTOR position;
 		VECTOR area;
@@ -75,6 +111,7 @@ void Stage::ReadMappingData(std::string filename)
 		int object[8];
 	};
 	ifs.close();
-	new Goblin(VECTOR3(1200, 150, 500), DX_PI);
-	new RedGoblin(VECTOR3(300, 150, 500), 0);
+	//new Goblin(VECTOR3(0, 150, 500), DX_PI);
+	//new Goblin(VECTOR3(50, 150, 500), DX_PI);
+	//new RedGoblin(VECTOR3(300, 150, 500), DX_PI);
 }

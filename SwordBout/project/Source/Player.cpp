@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <assert.h>
+#include "Enemy.h"
 #include "Stage.h"
 #include "Camera.h"
 #include "PadInput.h"
@@ -162,8 +163,12 @@ void Player::UpdateAttack1()
 	}
 	else
 	{
-		Goblin* gob = FindGameObject<Goblin>();
-		gob->CheckAttack(sabelBtm, sabelTop);
+		std::list<Enemy*> gobs = FindGameObjects<Enemy>();
+		for (Enemy* gob : gobs)
+		{
+			gob->CheckAttack(sabelBtm, sabelTop);
+		}
+	
 		PadInput* pad = FindGameObject<PadInput>();
 		if (pad->OnPush(XINPUT_BUTTON_A))
 		{
@@ -188,6 +193,9 @@ void Player::UpdateAttack2()
 	}
 	else
 	{
+		Goblin* gob = FindGameObject<Goblin>();
+		gob->CheckAttack(sabelBtm, sabelTop);
+
 		PadInput* pad = FindGameObject<PadInput>();
 		if (pad->OnPush(XINPUT_BUTTON_A))
 		{
@@ -206,5 +214,10 @@ void Player::UpdateAttack3()
 	if (animator->IsFinish())
 	{
 		state = ST_NORMAL;
+	}
+	else
+	{
+		Goblin* gob = FindGameObject<Goblin>();
+		gob->CheckAttack(sabelBtm, sabelTop);
 	}
 }
