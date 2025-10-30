@@ -12,6 +12,7 @@ public:
 	~Player();
 	void Update() override;
 	void Draw() override;
+	void CheckAttack(VECTOR3 p1, VECTOR3 p2);
 private:
 	enum AnimID {
 		A_NEUTRAL = 0,
@@ -44,6 +45,7 @@ private:
 		ST_ATTACK1,
 		ST_ATTACK2,
 		ST_ATTACK3,
+		ST_DAMAGE,
 	};
 	State state; // ó‘Ô‚ğ‚Â•Ï”
 	bool PushButton; // ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚©
@@ -52,6 +54,7 @@ private:
 	void UpdateAttack1();
 	void UpdateAttack2();
 	void UpdateAttack3();
+	void UpdateDamage();
 
 	VECTOR sabelBtm;
 	VECTOR sabelTop;

@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "Stage.h"
 #include "Player.h"
+#include "EnemyManager.h"
 
 Goblin::Goblin() : Goblin(VGet(0,0,0), 0.0f) {}
 
@@ -33,6 +34,9 @@ Goblin::Goblin(const VECTOR& pos, float rot)
 	transform.rotation.y = rot;
 	territory.center = pos;
 	territory.range = 2000.0f;
+
+	hAxe = MV1LoadModel("data/model/Character/Weapon/Axe/Axe.mv1");
+	assert(hAxe > 0);
 
 	state = ST_WAIT;
 }
@@ -82,6 +86,20 @@ void Goblin::Update()
 	}
 }
 
+void Goblin::Draw()
+{
+	Object3D::Draw();
+
+	// 斧を持たせる
+	MATRIX m = MV1GetFrameLocalWorldMatrix(hModel, 20);
+	MV1SetMatrix(hAxe, m);
+	MV1DrawModel(hAxe);
+
+	axeBtm = VGet(0, -100, 0) * m;
+	axeTop = VGet(0, 80, 0) * m;
+	DrawLine3D(axeBtm, axeTop, GetColor(255, 0, 0));
+}
+
 void Goblin::CheckAttack(VECTOR3 p1, VECTOR3 p2)
 {
 	MV1RefreshCollInfo(hModel);
@@ -116,7 +134,7 @@ void Goblin::UpdateDamage()
 	if (animator->IsFinish())
 	{
 		animator->Play(A_NEUTRAL);
-		state = ST_DAMAGE;
+		state = ST_WAIT;
 	}
 }
 
@@ -127,6 +145,8 @@ void Goblin::UpdateChase()
 	VECTOR3 velocity = VECTOR3(0, 0, 6) * MGetRotY(transform.rotation.y);
 	transform.position += velocity;
 	Player* pl = FindGameObject<Player>();
+	VECTOR3 diff = pl->GetTransform().position - transform.position;
+	float d = diff.Size();
 	VECTOR3 plPos = pl->GetTransform().position;
 	VECTOR3 right = VECTOR3(1,0,0) * MGetRotY(transform.rotation.y); // 右ベクトル
 	VECTOR3 toPlayer = plPos - transform.position;
@@ -140,12 +160,17 @@ void Goblin::UpdateChase()
 	{
 		transform.rotation.y -= DegToRad;
 	}
+	
 
 	// 近づいたらATTACKへ
 	if (toPlayer.Size() < 100.0f)
 	{
-		animator->Play(A_ATTACK1);
-		state = ST_ATTACK;
+		EnemyManager* man = FindGameObject<EnemyManager>();
+		if (man->RequestAttack(this))
+		{
+			animator->Play(A_ATTACK1);
+			state = ST_ATTACK;
+		}
 	}
 
 	// テリトリーを出たらWAIT
@@ -159,11 +184,28 @@ void Goblin::UpdateChase()
 
 void Goblin::UpdateAttack()
 {
+	if (animator->GetCurrentFrame() >= 20)
+	{
+		EnemyManager* man = FindGameObject<EnemyManager>();
+		man->CancelAttack(this); // this : 自分のインスタンスのポインター
+	}
+
+	Player* pl = FindGameObject<Player>();
 	// 攻撃アニメーションが終わったらWAITへ
 	if (animator->IsFinish())
 	{
 		animator->Play(A_NEUTRAL);
 		state = ST_WAIT;
+	}
+	float fram = animator->GetCurrentFrame();
+	if (fram < 20)
+	{
+		VECTOR3 toPl = pl->GetTransform().position - transform.position;
+		transform.rotation.y = atan2(toPl.x, toPl.z);
+	}
+	if (fram >= 24.5 && fram <= 27.5)
+	{
+		pl->CheckAttack(axeBtm, axeTop);
 	}
 }
 

@@ -60,19 +60,19 @@ void Player::Update()
 			push = s->IsWallRight(position + VECTOR2(39, 39));
 			position.x -= push;
 			//}
-			if (CheckHitKey(KEY_INPUT_SPACE)) {
-				if (prevJumpKey == false) {
-					if (onGround) {
-						// ジャンプ開始
-						velocity = V0; // 初速を決める
-					}
+		}
+		if (CheckHitKey(KEY_INPUT_SPACE)) {
+			if (prevJumpKey == false) {
+				if (onGround) {
+					// ジャンプ開始
+					velocity = V0; // 初速を決める
 				}
-				prevJumpKey = true;
 			}
-			else
-			{
-				prevJumpKey = false;
-			}
+			prevJumpKey = true;
+		}
+		else
+		{
+			prevJumpKey = false;
 		}
 		position.y += velocity; // 座標には速度を足す
 		velocity += Gravity; // 速度には重力を足す

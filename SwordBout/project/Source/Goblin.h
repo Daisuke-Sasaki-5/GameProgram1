@@ -9,6 +9,7 @@ public:
 	~Goblin();
 	void Update() override;
 	void CheckAttack(VECTOR3 p1, VECTOR3 p2)override;
+	void Draw() override;
 
 private:
 	enum AnimID {
@@ -23,6 +24,10 @@ private:
 		A_DOWN,
 	};
 	Animator* animator;
+
+	int hAxe;
+	VECTOR axeBtm;
+	VECTOR axeTop;
 
 	enum State {
 		ST_WAIT = 0, // ‘Ò‹@

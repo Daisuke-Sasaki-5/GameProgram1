@@ -81,6 +81,9 @@ void Player::Update()
 	case Player::ST_ATTACK3:
 		UpdateAttack3();
 		break;
+	case Player::ST_DAMAGE:
+		UpdateDamage();
+		break;
 	}
 
 	Stage* stage = FindGameObject<Stage>();
@@ -98,15 +101,25 @@ void Player::Update()
 void Player::Draw()
 {
 	Object3D::Draw(); // ƒLƒƒƒ‰‚Ì•\Ž¦
-	DrawLine3D(transform.position + moveVec * 100, transform.position, GetColor(255, 0, 0));
 
 	MATRIX m =  MV1GetFrameLocalWorldMatrix(hModel, 29);
 	MV1SetMatrix(hSabel, m);
 	MV1DrawModel(hSabel);
 
 	sabelBtm = VGet(0, 0, 0) * m;
-	sabelTop = VGet(0, -100, 0) * m;
+	sabelTop = VGet(0, -98, 0) * m;
 	DrawLine3D(sabelBtm, sabelTop, GetColor(255, 0, 0));
+}
+
+void Player::CheckAttack(VECTOR3 p1, VECTOR3 p2)
+{
+	MV1RefreshCollInfo(hModel);
+	MV1_COLL_RESULT_POLY ret = MV1CollCheck_Line(hModel, -1, p1, p2);
+	if (ret.HitFlag > 0)
+	{
+		animator->Play(A_DAMAGE);
+		state = ST_DAMAGE;
+	}
 }
 
 void Player::UpdateNormal()
@@ -219,5 +232,13 @@ void Player::UpdateAttack3()
 	{
 		Goblin* gob = FindGameObject<Goblin>();
 		gob->CheckAttack(sabelBtm, sabelTop);
+	}
+}
+
+void Player::UpdateDamage()
+{
+	if (animator->IsFinish())
+	{
+		state = ST_NORMAL;
 	}
 }

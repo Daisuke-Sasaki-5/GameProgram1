@@ -92,6 +92,9 @@
     <ClCompile Include="Source\PadInput.cpp">
       <Filter>2.PlayScene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EnemyManager.cpp">
+      <Filter>2.PlayScene\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -202,6 +205,9 @@
       <Filter>2.PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
+      <Filter>2.PlayScene\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyManager.h">
       <Filter>2.PlayScene\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

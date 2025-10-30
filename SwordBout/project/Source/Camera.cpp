@@ -42,7 +42,7 @@ void Camera::Update()
 	}
 
 	int mouseX, mouseY;
-	if (GetMousePoint(&mouseX, &mouseY)); // マウスの位置
+	GetMousePoint(&mouseX, &mouseY); // マウスの位置
 	int moveX = mouseX - prevMouseX; // マウス移動量
 	int moveY = mouseY - prevMouseY;
 
