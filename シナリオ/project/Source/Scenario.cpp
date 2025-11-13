@@ -1,5 +1,6 @@
 #include "Scenario.h"
 #include "assert.h"
+#include "Fade.h"
 
 Scenario::Scenario()
 {
@@ -12,6 +13,8 @@ Scenario::Scenario()
 		chara[c] = new Chara();
 	}
 
+	message = new Message();
+
 	readLine = 1;
 }
 
@@ -21,16 +24,45 @@ Scenario::~Scenario()
 
 void Scenario::Update()
 {
+	//char c = '0'; // cは48が入る
+	//if (c == 0x30);
+
+	std::string mes = csv->GetString(readLine, 0);
+	if (mes != "")
+	{
+		if (message->SetText(mes))
+		{
+			if (readLine < csv->GetLines() - 1)
+				readLine++;
+		}
+		return;
+	}
 	std::string com = csv->GetString(readLine, 1);
 	// コマンドを実行
 	if (com == "BGSET")
 	{
 		bg->Set(csv->GetString(readLine,3));
 	}
-	if (readLine < csv->GetLines() - 1)
+	if (com == "FADEOUT")
 	{
-		readLine++;
+		Fade* fade = FindGameObject<Fade>();
+		fade->FadeOut(csv->GetString(readLine, 3), csv->GetFloat(readLine, 4));
 	}
+	if (com == "FADEIN")
+	{
+		Fade* fade = FindGameObject<Fade>();
+		fade->FadeIn(csv->GetString(readLine, 3), csv->GetFloat(readLine, 4));
+	}
+	if (com == "WAIT_FADE")
+	{
+		Fade* fade = FindGameObject<Fade>();
+		if (fade->Finished() == false)
+		{
+			readLine--;
+		}
+	}
+	if (readLine < csv->GetLines() - 1)
+		readLine++;
 }
 
 void Scenario::Draw()

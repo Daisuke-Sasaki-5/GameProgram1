@@ -20,5 +20,6 @@ void BG::Update()
 
 void BG::Draw()
 {
+	// ‰æ‘œ‚ð•\Ž¦
 	DrawGraph(0, 0, hImage, TRUE);
 }

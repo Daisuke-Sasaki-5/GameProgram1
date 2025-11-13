@@ -230,6 +230,13 @@ void Player::UpdateAttack1()
 
 void Player::UpdateAttack2()
 {
+	float f = animator->GetCurrentFrame();
+	if (f >= 3.5f && f <= 4.0f)
+	{
+		animator->SetPlaySpeed(0.1f);
+		transform.rotation.y += 3.0f * DegToRad;
+	}
+
 	if (animator->GetCurrentFrame() >= 9.5 && PushButton)
 	{
 		animator->Play(A_ATTACK3);
