@@ -28,6 +28,8 @@ private:
 	{
 		int color;
 		bool erase;
+		float dy; // Yç¿ïWÇÇ∏ÇÁÇ∑
+		int connect;
 	};
 	std::vector<std::vector<CellInfo>> cells;
 
@@ -36,4 +38,7 @@ private:
 	void Clear();
 	int Check(int x, int y);
 	void Erase();
+	void Fall();
+	bool IsAll0();
+	float fallSpeed;
 };
